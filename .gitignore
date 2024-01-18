@@ -42,6 +42,4 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# ApiKey Files
-ios/Runner/ApiKey.plist
-android/app/src/main/res/values/keys.xml
+.env

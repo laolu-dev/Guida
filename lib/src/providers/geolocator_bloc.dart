@@ -1,8 +1,7 @@
 
 import 'package:geolocator/geolocator.dart';
 import 'package:guida/services/geolocator.dart';
-import 'package:guida/src/bloc/events.dart';
-import 'package:guida/src/bloc/state.dart';
+
 
 // class GeolocatorBloc extends Bloc<GeolocatorEvents, GeoLocationStates> {
 //   GeolocatorBloc() : super(AppValue()) {

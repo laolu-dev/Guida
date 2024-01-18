@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:guida/src/bloc/events.dart';
-import 'package:guida/src/bloc/geolocator_bloc.dart';
-import 'package:guida/src/bloc/state.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
