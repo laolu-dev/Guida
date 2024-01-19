@@ -8,13 +8,17 @@ class Loading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LoadingIndicator(
-      indicatorType: Indicator.ballBeat,
-      colors: [
-        GuidaColors.red,
-        GuidaColors.black,
-        GuidaColors.blue,
-      ],
+    return SizedBox(
+      height: 64,
+      width: 64,
+      child: LoadingIndicator(
+        indicatorType: Indicator.ballSpinFadeLoader,
+        colors: [
+          GuidaColors.red,
+          GuidaColors.black,
+          GuidaColors.blue,
+        ],
+      ),
     );
   }
 }

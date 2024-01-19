@@ -3,22 +3,33 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:guida/constants/color.dart';
 
 class GuidaForm extends StatelessWidget {
+  final Key? formKey;
+  final Color? formColor;
   final List<Widget> formFields;
-  const GuidaForm({super.key, required this.formFields});
+
+  const GuidaForm({
+    super.key,
+    required this.formFields,
+    this.formKey,
+    this.formColor,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: .40.sh,
-      width: .87.sw,
-      padding: const EdgeInsets.all(35),
+      width: .88.sw,
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 45),
       decoration: BoxDecoration(
-        color: GuidaColors.white,
+        color: formColor ?? GuidaColors.white,
         borderRadius: const BorderRadius.all(
           Radius.circular(25),
         ),
       ),
-      child: Column(children: formFields),
+      child: Form(
+        key: formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        child: Column(children: formFields),
+      ),
     );
   }
 }

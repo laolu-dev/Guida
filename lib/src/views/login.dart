@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guida/constants/color.dart';
 import 'package:guida/constants/routes.dart';
+import 'package:guida/constants/validators.dart';
+import 'package:guida/src/providers/providers.dart';
 import 'package:guida/src/widgets/button.dart';
 import 'package:guida/src/widgets/container.dart';
 import 'package:guida/src/widgets/form.dart';
@@ -23,6 +25,7 @@ class LoginView extends ConsumerStatefulWidget {
 class _LoginViewState extends ConsumerState<LoginView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
+  late final GlobalKey<FormState> _formKey;
   late final TapGestureRecognizer _createAccount;
 
   @override
@@ -30,6 +33,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
     super.initState();
     _email = TextEditingController();
     _password = TextEditingController();
+    _formKey = GlobalKey<FormState>();
     _createAccount = TapGestureRecognizer();
     _createAccount.onTap = () {
       Helpers.navigateTo(context, GuidaRouteString.signup);
@@ -40,12 +44,36 @@ class _LoginViewState extends ConsumerState<LoginView> {
   void dispose() {
     _email.dispose();
     _password.dispose();
+    _formKey.currentState?.dispose();
     Helpers.dropKeyboard();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(loginController);
+    ref.listen(
+      loginController,
+      (_, state) {
+        state.when(
+          data: (user) {
+            Helpers.navigateBack(context);
+            Helpers.showInAppAlertSuccess(
+                context, "Successfully logged in ${user?.displayName ?? ""}");
+            Future.delayed(
+              const Duration(seconds: 1),
+              () => Helpers.navigateTo(context, GuidaRouteString.home),
+            );
+          },
+          error: (error, trace) {
+            Helpers.navigateBack(context);
+            Helpers.showInAppAlertError(context, "$error");
+          },
+          loading: () => Helpers.showGuidaLoadingModal(context),
+        );
+      },
+    );
+
     return ViewWiget(
       backgroundColor: GuidaColors.grey,
       viewBody: SingleChildScrollView(
@@ -78,24 +106,32 @@ class _LoginViewState extends ConsumerState<LoginView> {
               bottom: .08.sh,
               left: (1.sw - .87.sw) / 2,
               child: GuidaForm(
+                formKey: _formKey,
                 formFields: [
                   GuidaTextField(
                     hint: "Email",
                     controller: _email,
+                    validator: (password) =>
+                        GuidaValidators.emailValidator(password),
                     fieldIcon: Ionicons.person_circle_outline,
+                    padding: 22.h,
                   ),
                   GuidaTextField(
                     hint: "Password",
-                    controller: _email,
+                    controller: _password,
+                    validator: (password) =>
+                        GuidaValidators.passwordValidator(password),
                     fieldIcon: Ionicons.lock_closed_outline,
+                    requiresPassword: true,
+                    padding: 8.h,
                   ),
+                  const ForgotPassword(),
                   SizedBox(height: 24.h),
                   GuidaButton(
                     name: 'Login',
-                    isLoading: true,
-                    action: () {},
+                    action: authState.isLoading ? null : () => loginUser(),
                   ),
-                  SizedBox(height: 24.h),
+                  SizedBox(height: 12.h),
                   RichText(
                     text: TextSpan(
                       text: "Don't have an account? ",
@@ -153,5 +189,17 @@ class _LoginViewState extends ConsumerState<LoginView> {
         ),
       ),
     );
+  }
+
+  void loginUser() {
+    Map<String, dynamic> payload = {
+      "email": _email.text,
+      "password": _password.text,
+    };
+
+    if (_formKey.currentState!.validate()) {
+      Helpers.dropKeyboard();
+      ref.read(loginController.notifier).login(payload);
+    }
   }
 }

@@ -4,12 +4,16 @@ class GuidaContainer extends StatelessWidget {
   final Color containerColor;
   final double? containerHeight;
   final double? containerWidth;
+  final Widget? child;
+
   final BorderRadiusGeometry? borderRadiusGeometry;
+
   const GuidaContainer({
     super.key,
     this.containerHeight,
     this.containerWidth,
     this.borderRadiusGeometry,
+    this.child,
     required this.containerColor,
   });
 
@@ -22,11 +26,11 @@ class GuidaContainer extends StatelessWidget {
         color: containerColor,
         borderRadius: borderRadiusGeometry ??
             const BorderRadius.only(
-              bottomLeft: Radius.circular(25),
+              bottomLeft: Radius.elliptical(10, 4),
               bottomRight: Radius.circular(25),
             ),
       ),
+      child: child,
     );
   }
 }
-

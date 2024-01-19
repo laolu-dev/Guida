@@ -19,7 +19,7 @@ class GuidaApp extends ConsumerWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: GuidaColors.red),
           useMaterial3: true,
         ),
-        initialRoute: ref.watch(routeProvider),
+        initialRoute: ref.watch(routeController),
         onGenerateRoute: GuidaRoutes.routeGenerator,
         debugShowCheckedModeBanner: false,
       ),

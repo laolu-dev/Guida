@@ -22,8 +22,7 @@ class GuidaRoutes {
         return MaterialPageRoute(builder: (context) => const SignupView());
       case GuidaRouteString.routeInformation:
         return MaterialPageRoute(builder: (context) => const RoutesView());
-      default:
-        return MaterialPageRoute(builder: (context) => const HomePage());
     }
+    return null;
   }
 }

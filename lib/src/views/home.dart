@@ -18,39 +18,23 @@ class _MyHomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // final geolocator = BlocProvider.of<GeolocatorBloc>(context);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text("Guida"),
-      ),
       body: Column(
         children: [
           Flexible(
             child: GoogleMap(
-              initialCameraPosition: const CameraPosition(target: LatLng(0, 0)),
+              initialCameraPosition: const CameraPosition(
+                target: LatLng(6.5158, 3.3898),
+                zoom: 15
+              ),
+              myLocationEnabled: true,
               onCameraMove: (postion) {},
               onMapCreated: (GoogleMapController controller) {
                 _controller = controller;
-                // _controller.complete(controller);
               },
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-    
-          await _controller?.animateCamera(
-            CameraUpdate.newCameraPosition(
-              CameraPosition(
-                target: LatLng(3.444, 10.222),
-                zoom: 20
-              ),
-            ),
-          );
-        },
-        child: const Icon(Icons.location_on),
       ),
     );
   }
