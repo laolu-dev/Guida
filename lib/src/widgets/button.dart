@@ -9,14 +9,9 @@ import 'package:guida/util/helpers.dart';
 
 class GuidaButton extends StatelessWidget {
   final String name;
-
   final void Function()? action;
 
-  const GuidaButton({
-    super.key,
-    required this.name,
-    this.action,
-  });
+  const GuidaButton({super.key, required this.name, this.action});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +23,7 @@ class GuidaButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(999),
         ),
-        fixedSize: Size(double.maxFinite, .05.sh),
+        fixedSize: Size(double.maxFinite, .055.sh),
         padding: const EdgeInsets.symmetric(vertical: 4),
       ),
       child: Text(
@@ -37,6 +32,30 @@ class GuidaButton extends StatelessWidget {
           fontSize: 20.sp,
           fontWeight: FontWeight.w600,
           color: GuidaColors.white,
+        ),
+      ),
+    );
+  }
+}
+
+class GuidaMapButton extends StatelessWidget {
+  final IconData icon;
+  final void Function()? onTap;
+  const GuidaMapButton({super.key, required this.icon, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipOval(
+      child: Material(
+        color: GuidaColors.red.withAlpha(160),
+        child: InkWell(
+          splashColor: GuidaColors.redAccent,
+          onTap: onTap,
+          child: SizedBox(
+            width: 50.w,
+            height: 50.h,
+            child: Icon(icon),
+          ),
         ),
       ),
     );

@@ -1,1 +1,0 @@
-enum ResetPasswordView {sendLink, resetPassword}

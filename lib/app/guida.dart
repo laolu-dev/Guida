@@ -12,6 +12,7 @@ class GuidaApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ScreenUtilInit(
       ensureScreenSize: true,
+      useInheritedMediaQuery: true,
       designSize: const Size(410, 896),
       builder: (context, _) => MaterialApp(
         title: 'Guida',

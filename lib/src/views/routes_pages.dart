@@ -12,6 +12,6 @@ class RoutesView extends ConsumerStatefulWidget {
 class _RoutesViewState extends ConsumerState<RoutesView> {
   @override
   Widget build(BuildContext context) {
-    return ViewWiget();
+    return ViewWidget();
   }
 }

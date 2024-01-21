@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:guida/constants/color.dart';
 import 'package:guida/constants/routes.dart';
 import 'package:guida/constants/validators.dart';
+import 'package:guida/services/geolocator.dart';
 import 'package:guida/src/providers/providers.dart';
 import 'package:guida/src/widgets/button.dart';
 import 'package:guida/src/widgets/container.dart';
@@ -38,6 +39,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
     _createAccount.onTap = () {
       Helpers.navigateTo(context, GuidaRouteString.signup);
     };
+    GeolocatorService.instance.init();
   }
 
   @override
@@ -60,10 +62,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
             Helpers.navigateBack(context);
             Helpers.showInAppAlertSuccess(
                 context, "Successfully logged in ${user?.displayName ?? ""}");
-            Future.delayed(
-              const Duration(seconds: 1),
-              () => Helpers.navigateTo(context, GuidaRouteString.home),
-            );
+            Helpers.navigateTo(context, GuidaRouteString.home);
           },
           error: (error, trace) {
             Helpers.navigateBack(context);
@@ -74,7 +73,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
       },
     );
 
-    return ViewWiget(
+    return ViewWidget(
       backgroundColor: GuidaColors.grey,
       viewBody: SingleChildScrollView(
         child: Stack(
@@ -155,7 +154,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
               ),
             ),
             Positioned(
-              top: .1.sh,
+              top: .08.sh,
               left: .18.sw,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

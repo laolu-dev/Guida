@@ -45,10 +45,13 @@ class Helpers {
       context: context,
       useSafeArea: true,
       isDismissible: false,
+      scrollControlDisabledMaxHeightRatio: 1,
       backgroundColor: Colors.transparent,
-      builder: (context) => const Align(
-        alignment: Alignment.center,
-        child: Loading(),
+      builder: (context) => const Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Align(alignment: Alignment.center, child: Loading()),
+        ],
       ),
     );
   }

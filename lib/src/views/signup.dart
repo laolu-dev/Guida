@@ -68,7 +68,7 @@ class _SignupViewState extends ConsumerState<SignupView> {
         loading: () => Helpers.showGuidaLoadingModal(context),
       );
     });
-    return ViewWiget(
+    return ViewWidget(
       backgroundColor: GuidaColors.grey,
       viewBody: SingleChildScrollView(
         child: Column(

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class ViewWiget extends StatelessWidget {
+class ViewWidget extends StatelessWidget {
   final Widget? viewBody;
   final Color? backgroundColor;
-  const ViewWiget({super.key, this.viewBody, this.backgroundColor});
+  const ViewWidget({super.key, this.viewBody, this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {

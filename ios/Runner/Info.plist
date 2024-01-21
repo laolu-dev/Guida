@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>GoogleMapApiKey</key>
-	<string>${GOOGLE_MAP_API_KEY}</string>
+	<string>${APIKEY_iOS}</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
