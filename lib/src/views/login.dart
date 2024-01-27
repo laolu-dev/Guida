@@ -2,7 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+import 'package:ionicons/ionicons.dart';
+
 import 'package:guida/constants/color.dart';
 import 'package:guida/constants/routes.dart';
 import 'package:guida/constants/validators.dart';
@@ -14,7 +16,6 @@ import 'package:guida/src/widgets/form.dart';
 import 'package:guida/src/widgets/textfield.dart';
 import 'package:guida/src/widgets/view_widget.dart';
 import 'package:guida/util/helpers.dart';
-import 'package:ionicons/ionicons.dart';
 
 class LoginView extends ConsumerStatefulWidget {
   const LoginView({super.key});
@@ -37,7 +38,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
     _formKey = GlobalKey<FormState>();
     _createAccount = TapGestureRecognizer();
     _createAccount.onTap = () {
-      Helpers.navigateTo(context, GuidaRouteString.signup);
+      Helpers.navigateTo(ref, GuidaRouteString.signup);
     };
     GeolocatorService.instance.init();
   }
@@ -58,14 +59,14 @@ class _LoginViewState extends ConsumerState<LoginView> {
       loginController,
       (_, state) {
         state.when(
-          data: (user) {
-            Helpers.navigateBack(context);
+          data: (user) async {
+            Helpers.navigateBack(ref);
             Helpers.showInAppAlertSuccess(
                 context, "Successfully logged in ${user?.displayName ?? ""}");
-            Helpers.navigateTo(context, GuidaRouteString.home);
+            Helpers.navigateTo(ref, GuidaRouteString.home);
           },
           error: (error, trace) {
-            Helpers.navigateBack(context);
+            Helpers.navigateBack(ref);
             Helpers.showInAppAlertError(context, "$error");
           },
           loading: () => Helpers.showGuidaLoadingModal(context),
@@ -134,7 +135,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                   RichText(
                     text: TextSpan(
                       text: "Don't have an account? ",
-                      style: GoogleFonts.montserrat(
+                      style: TextStyle(
                         fontSize: 12.sp,
                         color: GuidaColors.black,
                       ),
@@ -142,7 +143,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                         TextSpan(
                           text: "Create an account",
                           recognizer: _createAccount,
-                          style: GoogleFonts.montserrat(
+                          style: TextStyle(
                             fontSize: 12.sp,
                             color: GuidaColors.blue,
                           ),
@@ -167,7 +168,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                   SizedBox(height: 16.h),
                   Text(
                     "GUIDA",
-                    style: GoogleFonts.montserrat(
+                    style: TextStyle(
                       fontSize: 38.sp,
                       color: GuidaColors.red,
                       fontWeight: FontWeight.w800,
@@ -175,7 +176,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                   ),
                   Text(
                     "YOUR UNI GUIDE",
-                    style: GoogleFonts.montserrat(
+                    style: TextStyle(
                       fontSize: 28.sp,
                       color: GuidaColors.red,
                       fontWeight: FontWeight.w500,

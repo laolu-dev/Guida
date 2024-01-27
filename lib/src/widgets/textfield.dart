@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:guida/constants/color.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -43,12 +43,12 @@ class _GuidaTextFieldState extends State<GuidaTextField> {
             decoration: InputDecoration(
               filled: true,
               fillColor: widget.fillColor ?? GuidaColors.textFieldColor,
-              errorStyle: GoogleFonts.montserrat(
+              errorStyle: TextStyle(
                 fontSize: 10.sp,
                 color: GuidaColors.red,
               ),
               hintText: widget.hint,
-              hintStyle: GoogleFonts.montserrat(
+              hintStyle: TextStyle(
                 fontSize: 20.sp,
                 color: GuidaColors.black.withOpacity(.5),
               ),
@@ -95,7 +95,15 @@ class _GuidaTextFieldState extends State<GuidaTextField> {
 
 class MapTextField extends StatelessWidget {
   final TextEditingController controller;
-  const MapTextField({super.key, required this.controller});
+  final String hint;
+  final void Function()? onTap;
+
+  const MapTextField({
+    super.key,
+    this.onTap,
+    required this.hint,
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -115,11 +123,17 @@ class MapTextField extends StatelessWidget {
               fontSize: 16.sp,
               color: GuidaColors.black.withOpacity(.5),
             ),
+            onTap: onTap,
             decoration: InputDecoration(
               filled: true,
               fillColor: GuidaColors.white,
+              hintText: hint,
+              hintStyle: TextStyle(
+                fontSize: 20.sp,
+                color: GuidaColors.black.withOpacity(.5),
+              ),
               contentPadding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal:20),
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: GuidaColors.blue, width: 2),
                 borderRadius: BorderRadius.circular(999),

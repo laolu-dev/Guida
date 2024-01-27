@@ -1,16 +1,21 @@
 import 'package:cherry_toast/cherry_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:guida/constants/color.dart';
+import 'package:guida/src/providers/providers.dart';
 import 'package:guida/src/widgets/loading_widget.dart';
 
 class Helpers {
-  static void navigateTo(BuildContext context, String destination) {
-    Navigator.of(context).pushNamed(destination);
+  static void navigateTo(WidgetRef ref, String destination, {Object? args}) {
+    ref
+        .read(navigatorKey)
+        .currentState
+        ?.pushNamed(destination, arguments: args);
   }
 
-  static void navigateBack(BuildContext context) {
-    Navigator.of(context).pop();
+  static void navigateBack(WidgetRef ref) {
+    ref.read(navigatorKey).currentState?.pop();
   }
 
   static void dropKeyboard() {

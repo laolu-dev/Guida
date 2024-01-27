@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:guida/constants/color.dart';
 import 'package:guida/src/providers/providers.dart';
 import 'package:guida/src/views/password_reset.dart';
@@ -28,7 +28,7 @@ class GuidaButton extends StatelessWidget {
       ),
       child: Text(
         name,
-        style: GoogleFonts.montserrat(
+        style: TextStyle(
           fontSize: 20.sp,
           fontWeight: FontWeight.w600,
           color: GuidaColors.white,
@@ -83,7 +83,7 @@ class ForgotPassword extends ConsumerWidget {
         ),
         Text(
           "Remember me",
-          style: GoogleFonts.montserrat(
+          style: TextStyle(
             fontSize: 12.sp,
             color: GuidaColors.blue,
           ),
@@ -94,7 +94,7 @@ class ForgotPassword extends ConsumerWidget {
               Helpers.showGuidaModal(context, const SendResetLinkView()),
           child: Text(
             "Forgot password",
-            style: GoogleFonts.montserrat(
+            style: TextStyle(
               fontSize: 12.sp,
               color: GuidaColors.blue,
             ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:guida/constants/color.dart';
 import 'package:guida/constants/validators.dart';
 import 'package:guida/src/providers/providers.dart';
@@ -56,13 +55,13 @@ class _SignupViewState extends ConsumerState<SignupView> {
     ref.listen(createAccountController, (_, state) {
       state.when(
         data: (user) {
-          Helpers.navigateBack(context);
+          Helpers.navigateBack(ref);
           Helpers.showInAppAlertSuccess(
               context, "Successfully created an account. Please login");
-          Helpers.navigateBack(context);
+          Helpers.navigateBack(ref);
         },
         error: (error, trace) {
-          Helpers.navigateBack(context);
+          Helpers.navigateBack(ref);
           Helpers.showInAppAlertError(context, "$error");
         },
         loading: () => Helpers.showGuidaLoadingModal(context),
@@ -89,7 +88,7 @@ class _SignupViewState extends ConsumerState<SignupView> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
-                          onPressed: () => Helpers.navigateBack(context),
+                          onPressed: () => Helpers.navigateBack(ref),
                           splashColor: GuidaColors.redAccent,
                           icon: Icon(Icons.navigate_before,
                               size: 36, color: GuidaColors.white),
@@ -107,7 +106,7 @@ class _SignupViewState extends ConsumerState<SignupView> {
                     padding: const EdgeInsets.fromLTRB(32, 18, 32, 32),
                     child: Text(
                       "CREATE YOUR ACCOUNT",
-                      style: GoogleFonts.montserrat(
+                      style: TextStyle(
                           fontSize: 38.sp,
                           color: GuidaColors.white,
                           fontWeight: FontWeight.w800),

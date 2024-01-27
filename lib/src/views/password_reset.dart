@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:guida/constants/color.dart';
 import 'package:guida/constants/validators.dart';
 import 'package:guida/src/providers/providers.dart';
@@ -44,11 +43,11 @@ class _SendResetLinkViewState extends ConsumerState<SendResetLinkView> {
       state.when(
         data: (user) {
           Helpers.showInAppAlertInfo(context, "Kindly check your mail");
-          Helpers.navigateBack(context);
-          Helpers.navigateBack(context);
+          Helpers.navigateBack(ref);
+          Helpers.navigateBack(ref);
         },
         error: (error, trace) {
-          Helpers.navigateBack(context);
+          Helpers.navigateBack(ref);
           Helpers.showInAppAlertError(context, "$error");
         },
         loading: () => Helpers.showGuidaLoadingModal(context),
@@ -65,7 +64,7 @@ class _SendResetLinkViewState extends ConsumerState<SendResetLinkView> {
           children: [
             Text(
               "\t\tSend Reset Link",
-              style: GoogleFonts.montserrat(
+              style: TextStyle(
                 fontSize: 16.sp,
                 color: GuidaColors.black.withOpacity(.7),
               ),

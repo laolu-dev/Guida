@@ -5,13 +5,36 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Guida",
+            "name": "Guida (debug)",
             "type": "dart",
             "request": "launch",
             "toolArgs": [
                 "--dart-define-from-file",
-                ".env" 
+                ".env"
             ],
+            "flutterMode": "debug",
+            "program": "lib/main.dart"
+        },
+        {
+            "name": "Guida (profile)",
+            "type": "dart",
+            "request": "launch",
+            "toolArgs": [
+                "--dart-define-from-file",
+                ".env"
+            ],
+            "flutterMode": "profile",
+            "program": "lib/main.dart"
+        },
+        {
+            "name": "Guida (release)",
+            "type": "dart",
+            "request": "launch",
+            "toolArgs": [
+                "--dart-define-from-file",
+                ".env"
+            ],
+            "flutterMode": "release",
             "program": "lib/main.dart"
         },
     ]

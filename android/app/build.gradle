@@ -28,17 +28,17 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
-
-def appEnvConfig = [
-        APIKEY_ANDROID: project.hasProperty('APIKEY_ANDROID')
-                ? APIKEY_ANDROID
-                : "someString",
+//Get the Google Map ApiKey and assign it to a LinkedHashMap
+def environmentVariables = [
+        ANDROID_KEY: project.hasProperty('ANDROID_KEY')
+                ? ANDROID_KEY
+                : "AIzaSyCv_bDvSnGxfTwhF7ZrhQQysBrGcJAilRI",
 ]
 
 android {
     namespace "com.tmdc.guida"
-    compileSdkVersion 34
-    ndkVersion "25.1.8937393"
+    compileSdkVersion 33
+    ndkVersion flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -55,15 +55,16 @@ android {
 
     defaultConfig {
         applicationId "com.tmdc.guida"
-        minSdkVersion 21
-        targetSdkVersion 34
+        minSdkVersion 20
+        targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
 
-        resValue "string", "googleMapApiKey", appEnvConfig.APIKEY_ANDROID
+        resValue "string", "androidKey", environmentVariables.ANDROID_KEY
     }
 
     signingConfigs {
+
         release {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
@@ -72,10 +73,13 @@ android {
         }
     }
 
+    //Signing Config for both release and debug builds
     buildTypes {
         release {
             signingConfig signingConfigs.release
-    
+        }
+        debug {
+             signingConfig signingConfigs.debug
         }
     }
 }

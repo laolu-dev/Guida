@@ -1,29 +1,36 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-class PositionModel {
-  double latitude;
-  double longitude;
-  
-  PositionModel({
-    required this.latitude,
-    required this.longitude,
+import 'package:flutter/foundation.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+
+class GuidaMapRoute {
+  final String duration;
+  final String distance;
+
+  GuidaMapRoute({
+    required this.duration,
+    required this.distance,
   });
 
-  PositionModel copyWith({
-    double? latitude,
-    double? longitude,
+  GuidaMapRoute copyWith({
+    String? duration,
+    String? distance,
   }) {
-    return PositionModel(
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
+    return GuidaMapRoute(
+      duration: duration ?? this.duration,
+      distance: distance ?? this.distance,
     );
   }
 
   @override
-  bool operator ==(covariant PositionModel other) {
+  String toString() =>
+      'GuidaMapRoute(duration: $duration, distance: $distance)';
+
+  @override
+  bool operator ==(covariant GuidaMapRoute other) {
     if (identical(this, other)) return true;
-    return other.latitude == latitude && other.longitude == longitude;
+
+    return other.duration == duration && other.distance == distance;
   }
 
   @override
-  int get hashCode => latitude.hashCode ^ longitude.hashCode;
+  int get hashCode => duration.hashCode ^ distance.hashCode;
 }

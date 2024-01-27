@@ -45,9 +45,9 @@ class CreateAccountNotifier extends AutoDisposeAsyncNotifier<User?> {
   }
 }
 
-class ResendLinkNotifier extends AutoDisposeAsyncNotifier<User?> {
+class ResendLinkNotifier extends AutoDisposeAsyncNotifier<void> {
   @override
-  FutureOr<User?> build() => null;
+  FutureOr<void> build() => null;
 
   void sendResetLink(String email) async {
     state = const AsyncLoading();

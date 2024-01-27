@@ -1,67 +1,128 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:guida/constants/constants.dart';
 
-import 'package:guida/src/models/position_model.dart';
-import 'package:guida/src/providers/providers.dart';
+import 'package:guida/src/models/user_location.dart';
 
-class CurrentLocationNotifier extends AsyncNotifier<PositionModel?> {
+class UserLocationNotifier extends AutoDisposeAsyncNotifier<UserLocation> {
   @override
-  FutureOr<PositionModel?> build() async {
-    try {
-      final userPosition = await Geolocator.getCurrentPosition();
-      return PositionModel(
-          latitude: userPosition.latitude, longitude: userPosition.longitude);
-    } catch (e) {
-      debugPrint("$e");
-      return null;
-    }
-  }
-}
-
-class MarkersNotifier extends Notifier<Set<Marker>> {
-  @override
-  build() {
-    Set<Marker> markers = {};
-    final location = ref.watch(currentLocationController).value;
-    final currentLocationMarker = Marker(
-      markerId: const MarkerId("Current Location"),
-      infoWindow: const InfoWindow(title: "You"),
-      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
-      position:
-          LatLng(location?.latitude ?? 0.00, location?.longitude ?? 0.000),
+  FutureOr<UserLocation> build() async {
+    final userLocation = UserLocation(
+      markers: {},
+      address: "",
+      routeCoordinates: [],
+      currentLocation: GuidaConstants.unilag,
     );
-    markers.add(currentLocationMarker);
-    return markers;
-  }
 
-  void addMarker(LatLng coordinates) {
-    final newMarker = Marker(
-      markerId: const MarkerId("Marker"),
-      infoWindow: const InfoWindow(title: "You"),
-      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
-      position: LatLng(coordinates.latitude, coordinates.longitude),
-    );
-    state.add(newMarker);
-  }
-}
-
-class AddressNotifier extends AsyncNotifier<String> {
-  @override
-  FutureOr<String> build() async {
     try {
-      final location = ref.watch(currentLocationController).value;
+      BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
+          const ImageConfiguration(size: Size(12, 12)), "assets/user.png");
+
+      final position = await Geolocator.getCurrentPosition();
+
+      final userMarker = Marker(
+        markerId: const MarkerId("Current Location"),
+        infoWindow: const InfoWindow(title: "You"),
+        icon: markerbitmap,
+        position: LatLng(position.latitude, position.longitude),
+      );
+
       List<Placemark> p = await placemarkFromCoordinates(
-          location?.latitude ?? 0.00, location?.longitude ?? 0.00);
-      Placemark place = p[0];
-      return "${place.subThoroughfare},${place.thoroughfare}";
+          position.latitude, position.longitude,
+          localeIdentifier: "en_NG");
+
+      return userLocation.copyWith(
+        markers: {userMarker},
+        address: "${p.first.name}, ${p.first.street}",
+        currentLocation: LatLng(position.latitude, position.longitude),
+      );
     } catch (e) {
       debugPrint("$e");
-      return "";
+      state = AsyncError("$e", StackTrace.current);
+      return userLocation;
     }
   }
 
+  void placeDestinationMarker(String destination) async {
+    final oldState = state.value!;
+    state = const AsyncLoading();
+
+    try {
+      final endCoordinates =
+          await locationFromAddress(destination, localeIdentifier: 'en_NG');
+
+      if (oldState.markers.length > 1) {
+        oldState.markers.remove(oldState.markers.last);
+      }
+
+      state = AsyncData(
+        oldState.copyWith(
+          destination: LatLng(
+            endCoordinates.first.latitude,
+            endCoordinates.first.longitude,
+          ),
+          markers: {
+            ...oldState.markers,
+            _addMarker(
+              destination,
+              endCoordinates.first.latitude,
+              endCoordinates.first.longitude,
+            ),
+          },
+        ),
+      );
+    } catch (e) {
+      state = AsyncError("Marker error: $e", StackTrace.current);
+    }
+  }
+
+  void drawRoute() async {
+    final oldState = state.value!;
+    state = const AsyncLoading();
+
+    List<LatLng> points = [];
+    PolylinePoints polylinePoints = PolylinePoints();
+
+    try {
+      PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+        GuidaConstants.getApiKey(),
+        PointLatLng(
+          oldState.currentLocation.latitude,
+          oldState.currentLocation.longitude,
+        ),
+        PointLatLng(
+          oldState.markers.last.position.latitude,
+          oldState.markers.last.position.longitude,
+        ),
+      );
+
+      debugPrint(GuidaConstants.getApiKey());
+      if (result.points.isNotEmpty) {
+        points.clear();
+        for (var coordinates in result.points) {
+          points.add(LatLng(
+            coordinates.latitude,
+            coordinates.longitude,
+          ));
+        }
+      }
+      state = AsyncData(oldState.copyWith(routeCoordinates: [...points]));
+    } catch (e) {
+      state = AsyncError("Marker error: $e", StackTrace.current);
+    }
+  }
+
+  Marker _addMarker(String id, double lat, double lng) {
+    return Marker(
+      markerId: MarkerId("Marker $id"),
+      infoWindow: const InfoWindow(title: "Your destination"),
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+      position: LatLng(lat, lng),
+    );
+  }
 }

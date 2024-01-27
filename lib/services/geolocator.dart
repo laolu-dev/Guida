@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:guida/src/models/position_model.dart';
 
 class GeolocatorService {
   const GeolocatorService._internal();
