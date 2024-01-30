@@ -12,6 +12,7 @@ class GuidaConstants {
     return "";
   }
 
+  static const String baseUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json";
   static const LatLng unilag = LatLng(6.5166646, 3.38499846);
   static const LatLng carParkOne = LatLng(6.5167, 3.3850);
 }

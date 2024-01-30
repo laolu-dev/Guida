@@ -47,7 +47,7 @@ class GuidaMapButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipOval(
       child: Material(
-        color: GuidaColors.red.withAlpha(160),
+        color: GuidaColors.red.withAlpha(120),
         child: InkWell(
           splashColor: GuidaColors.redAccent,
           onTap: onTap,

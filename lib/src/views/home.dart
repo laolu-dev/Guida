@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:guida/constants/color.dart';
 import 'package:guida/constants/constants.dart';
+import 'package:guida/services/dio.dart';
+import 'package:guida/src/models/places_model.dart';
 import 'package:guida/src/providers/providers.dart';
 import 'package:guida/src/widgets/button.dart';
 
@@ -12,6 +14,7 @@ import 'package:guida/src/widgets/view_widget.dart';
 
 import 'package:guida/util/helpers.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:uuid/uuid.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -24,12 +27,16 @@ class _HomePageState extends ConsumerState<HomePage> {
   late GoogleMapController _controller;
   late final TextEditingController _from;
   late final TextEditingController _to;
+  bool _showListOne = false;
+  late String sessionToken = const Uuid().v4();
 
   @override
   void initState() {
     super.initState();
     _from = TextEditingController();
     _to = TextEditingController();
+
+    _to.addListener(() => _searchPlaces());
   }
 
   @override
@@ -59,9 +66,50 @@ class _HomePageState extends ConsumerState<HomePage> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            MapTextField(controller: _from, hint: "From:"),
+                            MapTextField(
+                              controller: _from,
+                              hint: "From:",
+                              onTap: () => setState(() {
+                                _showListOne = !_showListOne;
+                              }),
+                            ),
+                            // _showListOne
+                            //     ? Flexible(
+                            //         child: ListView.builder(
+                            //           itemCount: ref
+                            //               .watch(placesController(_from.text))
+                            //               .value
+                            //               ?.predictions
+                            //               .length,
+                            //           itemBuilder: (context, index) {
+                            //             return ListTile(
+                            //                 title: Text(
+                            //               "${ref.watch(placesController(_from.text)).value?.predictions[index].description}",
+                            //             ));
+                            //           },
+                            //         ),
+                            //       )
+                            //     : const SizedBox(),
                             SizedBox(height: 16.h),
-                            MapTextField(controller: _to, hint: "To:")
+                            // ref.watch(placesController(_to.text)).hasValue
+                            //     ? Flexible(
+                            //         child: ListView.builder(
+                            //           itemCount: ref
+                            //               .watch(placesController(_to.text))
+                            //               .value
+                            //               ?.predictions
+                            //               .length,
+                            //           itemBuilder: (context, index) {
+                            //             return ListTile(
+                            //               title: Text(
+                            //                 "${ref.watch(placesController(_from.text)).value?.predictions[index].description}",
+                            //               ),
+                            //             );
+                            //           },
+                            //         ),
+                            //       )
+                            //     : const SizedBox(),
+                            MapTextField(controller: _to, hint: "To:"),
                           ],
                         ),
                       ),
@@ -95,22 +143,32 @@ class _HomePageState extends ConsumerState<HomePage> {
                       icon: Ionicons.walk_outline,
                       onTap: () {},
                     ),
-                    SizedBox(width: 12.w),
+                    const RSizedBox(width: 6),
                     GuidaMapButton(
                       icon: Ionicons.car_outline,
                       onTap: () {},
                     ),
-                    SizedBox(width: 12.w),
+                    const RSizedBox(width: 6),
                     GuidaMapButton(
                       icon: Ionicons.bus_outline,
                       onTap: () {},
                     ),
+                    const RSizedBox(width: 6),
+                    GuidaMapButton(
+                      icon: Ionicons.locate,
+                      onTap: userLocation.value != null
+                          ? () => _moveCameraToUser(
+                                userLocation.value!.currentLocation.latitude,
+                                userLocation.value!.currentLocation.longitude,
+                              )
+                          : () => _showAlert("Cannot determine user location"),
+                    ),
                   ],
-                )
+                ),
               ],
             ),
           ),
-          Expanded(
+          Flexible(
             child: Stack(
               children: [
                 GoogleMap(
@@ -125,7 +183,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   markers: userLocation.value?.markers ?? {},
                   polylines: {
                     Polyline(
-                      width: 5,
+                      width: 2,
                       polylineId: const PolylineId("Route"),
                       points: userLocation.value?.routeCoordinates ?? [],
                       color: GuidaColors.black,
@@ -143,34 +201,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                   // ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 16, right: 16.w, top: .62.sh),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: GuidaButton(
-                          name: "Go",
-                          action: userLocation.isLoading
-                              ? null
-                              : () {
-                                  _changeCameraToDestination();
-                                  _controlCamera(
-                                      userLocation.value!.destination);
-                                },
-                        ),
-                      ),
-                      SizedBox(width: 12.w),
-                      GuidaMapButton(
-                          icon: Ionicons.locate,
-                          onTap: userLocation.value != null
-                              ? () => _moveCameraToUser(
-                                    userLocation
-                                        .value!.currentLocation.latitude,
-                                    userLocation
-                                        .value!.currentLocation.longitude,
-                                  )
-                              : () =>
-                                  _showAlert("Cannot determine user location"))
-                    ],
+                padding: REdgeInsets.only(top: .66.sh, left: 20, right: 20),
+                  child: GuidaButton(
+                    name: "Go",
+                    action: userLocation.isLoading
+                        ? null
+                        : () {
+                            _changeCameraToDestination();
+                            _controlCamera(userLocation.value!.destination);
+                          },
                   ),
                 )
               ],
@@ -197,7 +236,6 @@ class _HomePageState extends ConsumerState<HomePage> {
       ref
           .read(userLocationController.notifier)
           .placeDestinationMarker(_to.text);
-      ref.read(userLocationController.notifier).drawRoute();
     } else {
       Helpers.showInAppAlertError(context, "Enter your destination");
     }
@@ -210,6 +248,18 @@ class _HomePageState extends ConsumerState<HomePage> {
           CameraPosition(target: destination, zoom: 17.0),
         ),
       );
+    }
+  }
+
+  void _searchPlaces() async {
+    try {
+      final response = await GuidaApiService.dio.get(
+        "?input=${_to.text}&key=${GuidaConstants.getApiKey()}&sessiontoken=$sessionToken",
+      );
+      var a = PlacesModel.fromJson(response.data);
+      debugPrint(a.toString());
+    } catch (e) {
+      debugPrint(e.toString());
     }
   }
 

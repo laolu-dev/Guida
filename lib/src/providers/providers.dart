@@ -2,10 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:guida/src/models/places_model.dart';
 import 'package:guida/src/models/user_location.dart';
 
 import 'package:guida/src/providers/auth_controller.dart';
 import 'package:guida/src/providers/map_controller.dart';
+import 'package:guida/src/providers/places_controller.dart';
 
 import 'package:guida/src/providers/route_controller.dart';
 
@@ -33,3 +35,6 @@ final userLocationController =
     AutoDisposeAsyncNotifierProvider<UserLocationNotifier, UserLocation>(
         UserLocationNotifier.new);
 
+final placesController =
+    AsyncNotifierProviderFamily<PlacesNotifier, PlacesModel?, String>(
+        PlacesNotifier.new);
