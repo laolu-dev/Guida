@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:guida/src/controllers/location_data_controller.dart';
+import 'package:guida/src/models/faculty.dart';
 
-import 'package:guida/constants/color.dart';
-import 'package:guida/src/providers/providers.dart';
-import 'package:guida/src/views/password_reset.dart';
-import 'package:guida/util/helpers.dart';
+import '../../constants/color.dart';
 
 class GuidaButton extends StatelessWidget {
   final String name;
@@ -38,10 +37,10 @@ class GuidaButton extends StatelessWidget {
   }
 }
 
-class GuidaMapButton extends StatelessWidget {
+class MapViewButton extends StatelessWidget {
   final IconData icon;
   final void Function()? onTap;
-  const GuidaMapButton({super.key, required this.icon, this.onTap});
+  const MapViewButton({super.key, required this.icon, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -62,45 +61,80 @@ class GuidaMapButton extends StatelessWidget {
   }
 }
 
-class ForgotPassword extends ConsumerWidget {
-  const ForgotPassword({super.key});
+class GuidaSearchButton extends ConsumerStatefulWidget {
+  const GuidaSearchButton({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Row(
-      children: [
-        SizedBox(
-          height: 32,
-          width: 32,
-          child: Checkbox.adaptive(
-            value: ref.watch(rememberMeController),
-            onChanged: (value) =>
-                ref.read(rememberMeController.notifier).changeState(value!),
-            activeColor: GuidaColors.blue,
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            side: BorderSide(color: GuidaColors.blue),
-          ),
-        ),
-        Text(
-          "Remember me",
-          style: TextStyle(
-            fontSize: 12.sp,
-            color: GuidaColors.blue,
-          ),
-        ),
-        const Spacer(),
-        GestureDetector(
-          onTap: () =>
-              Helpers.showGuidaModal(context, const SendResetLinkView()),
-          child: Text(
-            "Forgot password",
-            style: TextStyle(
-              fontSize: 12.sp,
-              color: GuidaColors.blue,
+  ConsumerState<GuidaSearchButton> createState() => _GuidaSearchButtonState();
+}
+
+class _GuidaSearchButtonState extends ConsumerState<GuidaSearchButton> {
+  // bool _isLoading = false;
+  String? _searchingWithQuery;
+
+  // The most recent options received from the API.
+  late Iterable<Widget> _lastOptions = <Widget>[];
+
+  @override
+  Widget build(BuildContext context) {
+    return SearchAnchor(
+      isFullScreen: false,
+      dividerColor: GuidaColors.white,
+      viewHintText: "Search for a faculty",
+      textInputAction: TextInputAction.search,
+      builder: (context, controller) => const Icon(Icons.search),
+      suggestionsBuilder: (context, controller) async {
+        _searchingWithQuery = controller.text;
+        final List<Faculty> options =
+            (await _search(_searchingWithQuery!)).toList();
+
+        // If another search happened after this one, throw away these options.
+        // Use the previous options instead and wait for the newer request to
+        // finish.
+        if (_searchingWithQuery != controller.text) {
+          return _lastOptions;
+        }
+
+        _lastOptions = List<Widget>.generate(options.length, (int index) {
+          final Faculty item = options[index];
+          return GestureDetector(
+            onTap: () {
+              controller.closeView(controller.text);
+            },
+            child: Container(
+              padding: REdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              margin: REdgeInsets.fromLTRB(12, 16, 24, 16),
+              decoration: BoxDecoration(
+                color: GuidaColors.white,
+                borderRadius: BorderRadius.circular(12.r),
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 1,
+                    offset: const Offset(2, 2),
+                    color: GuidaColors.black.withOpacity(.1),
+                  )
+                ],
+              ),
+              child: Text(
+                "Faculty of ${item.name}",
+                style: TextStyle(fontSize: 16.sp),
+              ),
             ),
-          ),
-        )
-      ],
+          );
+        });
+
+        return _lastOptions;
+      },
     );
+  }
+
+  Future<Iterable<Faculty>> _search(String query) async {
+    final data = ref.read(locationDataController).value!;
+    if (query == '') {
+      return const Iterable<Faculty>.empty();
+    }
+    return data.where((Faculty option) {
+      return option.name.contains(query.toLowerCase());
+    });
   }
 }

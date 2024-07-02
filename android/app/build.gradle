@@ -28,7 +28,7 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
-//Get the Google Map ApiKey and assign it to a LinkedHashMap
+// Get the Google Map ApiKey and assign it to a LinkedHashMap
 def environmentVariables = [
         ANDROID_KEY: project.hasProperty('ANDROID_KEY')
                 ? ANDROID_KEY
@@ -37,7 +37,7 @@ def environmentVariables = [
 
 android {
     namespace "com.tmdc.guida"
-    compileSdkVersion 33
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -55,7 +55,7 @@ android {
 
     defaultConfig {
         applicationId "com.tmdc.guida"
-        minSdkVersion 20
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

@@ -1,6 +1,7 @@
+
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:guida/src/models/place_metadata/metadata/place_metadata.dart';
+import '../place_metadata/metadata/place_metadata.dart';
 
 part 'places_model.g.dart';
 

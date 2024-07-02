@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:guida/constants/color.dart';
+import '../../constants/color.dart';
 import 'package:ionicons/ionicons.dart';
 
 class GuidaTextField extends StatefulWidget {

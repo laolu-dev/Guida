@@ -17,6 +17,7 @@ class GeolocatorService {
     }
   }
 
+
   void _checkPermissions() async {
     final permissions = await Geolocator.checkPermission();
     switch (permissions) {

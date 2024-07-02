@@ -1,8 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:guida/src/models/place_metadata/formatting/formatting.dart';
-import 'package:guida/src/models/place_metadata/sub_string/substring.dart';
-import 'package:guida/src/models/place_metadata/terms/terms.dart';
+import '../formatting/formatting.dart';
+import '../sub_string/substring.dart';
+import '../terms/terms.dart';
 
 part 'place_metadata.g.dart';
 

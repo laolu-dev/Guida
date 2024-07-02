@@ -10,7 +10,7 @@
             "request": "launch",
             "toolArgs": [
                 "--dart-define-from-file",
-                ".env"
+                "env/secrets.json"
             ],
             "flutterMode": "debug",
             "program": "lib/main.dart"
@@ -21,7 +21,7 @@
             "request": "launch",
             "toolArgs": [
                 "--dart-define-from-file",
-                ".env"
+                "env/secrets.json"
             ],
             "flutterMode": "profile",
             "program": "lib/main.dart"
@@ -32,7 +32,7 @@
             "request": "launch",
             "toolArgs": [
                 "--dart-define-from-file",
-                ".env"
+                "env/secrets.json"
             ],
             "flutterMode": "release",
             "program": "lib/main.dart"

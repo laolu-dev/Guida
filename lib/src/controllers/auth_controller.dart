@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -59,11 +60,4 @@ class ResendLinkNotifier extends AutoDisposeAsyncNotifier<void> {
       state = AsyncError("${e.message}", e.stackTrace ?? StackTrace.current);
     }
   }
-}
-
-class RememberMeNotifier extends Notifier<bool> {
-  @override
-  build() => false;
-
-  void changeState(bool value) => state = value;
 }

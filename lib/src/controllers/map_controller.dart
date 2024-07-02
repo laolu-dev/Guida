@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:ui' as ui;
+import 'dart:math' show cos, sqrt, asin;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -7,9 +9,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:guida/constants/constants.dart';
 
-import 'package:guida/src/models/user_location.dart';
+import '../../constants/constants.dart';
+import '../models/user_location.dart';
 
 class UserLocationNotifier extends AutoDisposeAsyncNotifier<UserLocation> {
   @override
@@ -17,6 +19,7 @@ class UserLocationNotifier extends AutoDisposeAsyncNotifier<UserLocation> {
     final userLocation = UserLocation(
       markers: {},
       address: "",
+      distance: "",
       routeCoordinates: [],
       currentLocation: GuidaConstants.unilag,
     );
@@ -28,7 +31,7 @@ class UserLocationNotifier extends AutoDisposeAsyncNotifier<UserLocation> {
       final userMarker = Marker(
         markerId: const MarkerId("Current Location"),
         infoWindow: const InfoWindow(title: "You"),
-        icon: BitmapDescriptor.fromBytes(image),
+        icon: BitmapDescriptor.bytes(image),
         position: LatLng(position.latitude, position.longitude),
       );
 
@@ -37,16 +40,16 @@ class UserLocationNotifier extends AutoDisposeAsyncNotifier<UserLocation> {
 
       return userLocation.copyWith(
         markers: {userMarker},
-        address: "${p?.first.name}, ${p?.first.street}",
+        address: "${p?.first.name}, ${p?.first.locality}",
         currentLocation: LatLng(position.latitude, position.longitude),
       );
     } catch (e) {
-      debugPrint("$e");
       state = AsyncError("$e", StackTrace.current);
       return userLocation;
     }
   }
 
+// lat: 6.5160016, lng: 3.3844395
   void placeDestinationMarker(String destination) async {
     final oldState = state.value!;
     state = const AsyncLoading();
@@ -55,8 +58,7 @@ class UserLocationNotifier extends AutoDisposeAsyncNotifier<UserLocation> {
     List<LatLng> routes = [];
 
     try {
-      final targetLocation =
-          await locationFromAddress(destination, localeIdentifier: 'en_NG');
+      final targetLocation = await locationFromAddress(destination);
 
       routes = await _drawRouteLine(
         oldState.currentLocation.latitude,
@@ -76,6 +78,7 @@ class UserLocationNotifier extends AutoDisposeAsyncNotifier<UserLocation> {
             targetLocation.first.latitude,
             targetLocation.first.longitude,
           ),
+          distance: "${await _calculateDistance()} m",
           markers: {
             ...oldState.markers,
             _addMarker(
@@ -88,10 +91,24 @@ class UserLocationNotifier extends AutoDisposeAsyncNotifier<UserLocation> {
           routeCoordinates: routes,
         ),
       );
-      debugPrint(routes.toString());
     } catch (e) {
+      debugPrint("$e");
       state = AsyncError("Marker error: $e", StackTrace.current);
     }
+  }
+
+  Future<double> _calculateDistance() async {
+    double distance = 0.00;
+    final currentPosition = state.value!.currentLocation;
+    final destination = state.value!.destination;
+
+    distance = Geolocator.distanceBetween(
+      currentPosition.latitude,
+      currentPosition.longitude,
+      destination!.latitude,
+      destination.longitude,
+    );
+    return distance.roundToDouble();
   }
 
   Future<Uint8List> _getBytesFromAssets(String imagePath) async {
@@ -110,9 +127,7 @@ class UserLocationNotifier extends AutoDisposeAsyncNotifier<UserLocation> {
   Future<List<Placemark>?> _getUserCurrentAddress(
       double lat, double lng) async {
     try {
-      final placemarks =
-          await placemarkFromCoordinates(lat, lng, localeIdentifier: "en_NG");
-
+      final placemarks = await placemarkFromCoordinates(lat, lng);
       return placemarks;
     } catch (e) {
       debugPrint("$e");
@@ -127,9 +142,12 @@ class UserLocationNotifier extends AutoDisposeAsyncNotifier<UserLocation> {
 
     try {
       PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        GuidaConstants.getApiKey(),
-        PointLatLng(startLat, startLng),
-        PointLatLng(endLat, endLng),
+        request: PolylineRequest(
+          origin: PointLatLng(startLat, startLng),
+          destination: PointLatLng(endLat, endLng),
+          mode: TravelMode.walking,
+        ),
+        googleApiKey: GuidaConstants.getApiKey(),
       );
 
       if (result.points.isNotEmpty) {
@@ -137,7 +155,6 @@ class UserLocationNotifier extends AutoDisposeAsyncNotifier<UserLocation> {
           points.add(LatLng(coordinates.latitude, coordinates.longitude));
         }
       }
-
       return points;
     } catch (e) {
       debugPrint("$e");
@@ -149,7 +166,7 @@ class UserLocationNotifier extends AutoDisposeAsyncNotifier<UserLocation> {
     return Marker(
       markerId: MarkerId("Marker $id"),
       infoWindow: const InfoWindow(title: "Your destination"),
-      icon: BitmapDescriptor.fromBytes(image),
+      icon: BitmapDescriptor.bytes(image),
       position: LatLng(lat, lng),
     );
   }

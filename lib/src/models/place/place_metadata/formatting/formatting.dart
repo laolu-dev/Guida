@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+
 import 'package:json_annotation/json_annotation.dart';
-import 'package:guida/src/models/place_metadata/sub_string/substring.dart';
+
+import '../sub_string/substring.dart';
 
 part 'formatting.g.dart';
 

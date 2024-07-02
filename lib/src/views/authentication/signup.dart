@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:guida/constants/color.dart';
-import 'package:guida/constants/validators.dart';
-import 'package:guida/src/providers/providers.dart';
-import 'package:guida/src/widgets/button.dart';
-import 'package:guida/src/widgets/container.dart';
-import 'package:guida/src/widgets/textfield.dart';
-import 'package:guida/src/widgets/view_widget.dart';
-import 'package:guida/util/helpers.dart';
 import 'package:ionicons/ionicons.dart';
+
+import '../../../constants/color.dart';
+import '../../../constants/validators.dart';
+import '../../../util/helpers.dart';
+import '../../controllers/providers.dart';
+import '../../widgets/button.dart';
+import '../../widgets/container.dart';
+import '../../widgets/textfield.dart';
+import '../../widgets/view_widget.dart';
 
 class SignupView extends ConsumerStatefulWidget {
   const SignupView({super.key});

@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class UserLocation {
   final Set<Marker> markers;
   final String address;
+  final String distance;
   final List<LatLng> routeCoordinates;
   final LatLng currentLocation;
   final LatLng? destination;
@@ -12,6 +13,7 @@ class UserLocation {
   UserLocation({
     required this.markers,
     required this.address,
+    required this.distance,
     required this.routeCoordinates,
     required this.currentLocation,
     this.destination,
@@ -19,7 +21,7 @@ class UserLocation {
 
   @override
   String toString() {
-    return 'UserLocation(markers: $markers, address: $address, routeCoordinates: $routeCoordinates, currentLocation: $currentLocation, destination: $destination)';
+    return 'UserLocation(markers: $markers, address: $address, distance: $distance, routeCoordinates: $routeCoordinates, currentLocation: $currentLocation, destination: $destination)';
   }
 
   @override
@@ -28,6 +30,7 @@ class UserLocation {
 
     return setEquals(other.markers, markers) &&
         other.address == address &&
+        other.distance == distance &&
         listEquals(other.routeCoordinates, routeCoordinates) &&
         other.currentLocation == currentLocation &&
         other.destination == destination;
@@ -37,6 +40,7 @@ class UserLocation {
   int get hashCode {
     return markers.hashCode ^
         address.hashCode ^
+        distance.hashCode ^
         routeCoordinates.hashCode ^
         currentLocation.hashCode ^
         destination.hashCode;
@@ -45,6 +49,7 @@ class UserLocation {
   UserLocation copyWith({
     Set<Marker>? markers,
     String? address,
+    String? distance,
     List<LatLng>? routeCoordinates,
     LatLng? currentLocation,
     LatLng? destination,
@@ -52,6 +57,7 @@ class UserLocation {
     return UserLocation(
       markers: markers ?? this.markers,
       address: address ?? this.address,
+      distance: distance ?? this.distance,
       routeCoordinates: routeCoordinates ?? this.routeCoordinates,
       currentLocation: currentLocation ?? this.currentLocation,
       destination: destination ?? this.destination,

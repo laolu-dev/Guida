@@ -2,20 +2,20 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:ionicons/ionicons.dart';
 
-import 'package:guida/constants/color.dart';
-import 'package:guida/constants/routes.dart';
-import 'package:guida/constants/validators.dart';
-import 'package:guida/services/geolocator.dart';
-import 'package:guida/src/providers/providers.dart';
-import 'package:guida/src/widgets/button.dart';
-import 'package:guida/src/widgets/container.dart';
-import 'package:guida/src/widgets/form.dart';
-import 'package:guida/src/widgets/textfield.dart';
-import 'package:guida/src/widgets/view_widget.dart';
-import 'package:guida/util/helpers.dart';
+import '../../../constants/color.dart';
+import '../../../constants/route_names.dart';
+import '../../../constants/validators.dart';
+import '../../../services/geolocator.dart';
+import '../../../util/helpers.dart';
+import '../../controllers/providers.dart';
+import '../../widgets/button.dart';
+import '../../widgets/container.dart';
+import '../../widgets/form.dart';
+import '../../widgets/textfield.dart';
+import '../../widgets/view_widget.dart';
+import 'forgot_password.dart';
 
 class LoginView extends ConsumerStatefulWidget {
   const LoginView({super.key});
@@ -63,7 +63,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
             Helpers.navigateBack(ref);
             Helpers.showInAppAlertSuccess(
                 context, "Successfully logged in ${user?.displayName ?? ""}");
-            Helpers.navigateTo(ref, GuidaRouteString.home);
+            Helpers.navigateTo(ref, GuidaRouteString.faculties);
           },
           error: (error, trace) {
             Helpers.navigateBack(ref);
@@ -114,7 +114,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     validator: (password) =>
                         GuidaValidators.emailValidator(password),
                     fieldIcon: Ionicons.person_circle_outline,
-                    padding: 22.h,
+                    padding: 16.h,
                   ),
                   GuidaTextField(
                     hint: "Password",
@@ -125,8 +125,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     requiresPassword: true,
                     padding: 8.h,
                   ),
-                  const ForgotPassword(),
-                  SizedBox(height: 24.h),
+                  const ForgotPasswordView(),
+                  const RSizedBox(height: 16),
                   GuidaButton(
                     name: 'Login',
                     action: authState.isLoading ? null : () => loginUser(),

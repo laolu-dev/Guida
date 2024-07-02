@@ -2,9 +2,12 @@ import 'package:cherry_toast/cherry_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:guida/constants/color.dart';
-import 'package:guida/src/providers/providers.dart';
-import 'package:guida/src/widgets/loading_widget.dart';
+
+import '../constants/color.dart';
+import '../src/widgets/loading_widget.dart';
+
+final navigatorKey =
+    Provider<GlobalKey<NavigatorState>>((ref) => GlobalKey<NavigatorState>());
 
 class Helpers {
   static void navigateTo(WidgetRef ref, String destination, {Object? args}) {
@@ -26,7 +29,7 @@ class Helpers {
     showModalBottomSheet(
       context: context,
       useSafeArea: true,
-      isDismissible: false,
+      // isDismissible: false,
       showDragHandle: true,
       isScrollControlled: true,
       backgroundColor: GuidaColors.white,
@@ -51,7 +54,7 @@ class Helpers {
       useSafeArea: true,
       isDismissible: false,
       scrollControlDisabledMaxHeightRatio: 1,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       builder: (context) => const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

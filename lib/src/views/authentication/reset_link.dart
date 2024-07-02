@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:guida/constants/color.dart';
-import 'package:guida/constants/validators.dart';
-import 'package:guida/src/providers/providers.dart';
-import 'package:guida/src/widgets/button.dart';
-import 'package:guida/src/widgets/textfield.dart';
-import 'package:guida/util/helpers.dart';
 import 'package:ionicons/ionicons.dart';
 
-class SendResetLinkView extends ConsumerStatefulWidget {
-  const SendResetLinkView({super.key});
+import '../../../constants/color.dart';
+import '../../../constants/validators.dart';
+import '../../../util/helpers.dart';
+import '../../controllers/providers.dart';
+import '../../widgets/button.dart';
+import '../../widgets/textfield.dart';
+
+class ResetLinkView extends ConsumerStatefulWidget {
+  const ResetLinkView({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _SendResetLinkViewState();
+      _ResetLinkViewState();
 }
 
-class _SendResetLinkViewState extends ConsumerState<SendResetLinkView> {
+class _ResetLinkViewState extends ConsumerState<ResetLinkView> {
   late final TextEditingController _email;
   late final GlobalKey<FormState> _formKey;
 
