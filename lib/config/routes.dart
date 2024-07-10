@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:guida/src/models/location/location_model.dart';
 
 import '../constants/route_names.dart';
-import '../src/models/department.dart';
+import '../src/models/department/department_model.dart';
 import '../src/views/authentication/login.dart';
 import '../src/views/authentication/signup.dart';
 import '../src/views/directions.dart';
@@ -21,12 +22,12 @@ class GuidaRoutes {
       case GuidaRouteString.locations:
         return MaterialPageRoute(
           builder: (context) =>
-              LocationsView(department: settings.arguments as Department),
+              LocationsView(department: settings.arguments as DepartmentModel),
         );
       case GuidaRouteString.directions:
         return MaterialPageRoute(
           builder: (context) =>
-              DirectionsView(directions: settings.arguments as List<String>),
+              DirectionsView(location: settings.arguments as LocationModel),
         );
       case GuidaRouteString.mapView:
         return MaterialPageRoute(builder: (context) => const GuidaMapView());

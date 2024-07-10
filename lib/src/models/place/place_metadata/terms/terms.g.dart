@@ -7,7 +7,7 @@ part of 'terms.dart';
 // **************************************************************************
 
 Terms _$TermsFromJson(Map<String, dynamic> json) => Terms(
-      offset: json['offset'] as int,
+      offset: (json['offset'] as num).toInt(),
       value: json['value'] as String,
     );
 

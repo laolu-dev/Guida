@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'loading_widget.dart';
+import 'package:guida/constants/images.dart';
+import '../controllers/search_places_controller.dart';
+import '../widgets/loading_widget.dart';
 import 'package:ionicons/ionicons.dart';
 
 import '../../constants/color.dart';
 import '../models/place/place_model/places_model.dart';
-import '../controllers/providers.dart';
 
-class AddressSearch extends SearchDelegate<String> {
+class SearchPlacesView extends SearchDelegate<String> {
   @override
   String? get searchFieldLabel => "Enter Location";
 
@@ -34,7 +35,7 @@ class AddressSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return MapError(btnAction: () => close(context, ''));
+    return SearchPlacesErrorView(btnAction: () => close(context, ''));
   }
 
   @override
@@ -72,9 +73,9 @@ class AddressSearch extends SearchDelegate<String> {
   }
 }
 
-class MapError extends StatelessWidget {
+class SearchPlacesErrorView extends StatelessWidget {
   final void Function()? btnAction;
-  const MapError({super.key, this.btnAction});
+  const SearchPlacesErrorView({super.key, this.btnAction});
 
   @override
   Widget build(BuildContext context) {
@@ -83,10 +84,7 @@ class MapError extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            "assets/map_error.png",
-            width: .4.sw,
-          ),
+          Image.asset(Images.error, width: .4.sw),
           Text(
             "Could not find address.",
             style: TextStyle(fontSize: 22.sp, color: GuidaColors.black),

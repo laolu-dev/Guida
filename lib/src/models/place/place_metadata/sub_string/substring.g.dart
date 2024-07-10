@@ -7,8 +7,8 @@ part of 'substring.dart';
 // **************************************************************************
 
 SubString _$SubStringFromJson(Map<String, dynamic> json) => SubString(
-      length: json['length'] as int,
-      offset: json['offset'] as int,
+      length: (json['length'] as num).toInt(),
+      offset: (json['offset'] as num).toInt(),
     );
 
 Map<String, dynamic> _$SubStringToJson(SubString instance) => <String, dynamic>{

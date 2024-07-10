@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:guida/src/controllers/location_data_controller.dart';
-import 'package:guida/src/models/faculty.dart';
+import 'package:guida/src/controllers/search_controller.dart';
+import 'package:guida/src/models/location/location_model.dart';
 
 import '../../constants/color.dart';
+import '../../constants/route_names.dart';
+import '../../util/helpers.dart';
 
 class GuidaButton extends StatelessWidget {
   final String name;
@@ -37,39 +39,16 @@ class GuidaButton extends StatelessWidget {
   }
 }
 
-class MapViewButton extends StatelessWidget {
-  final IconData icon;
-  final void Function()? onTap;
-  const MapViewButton({super.key, required this.icon, this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipOval(
-      child: Material(
-        color: GuidaColors.red.withAlpha(120),
-        child: InkWell(
-          splashColor: GuidaColors.redAccent,
-          onTap: onTap,
-          child: SizedBox(
-            width: 50.w,
-            height: 50.h,
-            child: Icon(icon),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class GuidaSearchButton extends ConsumerStatefulWidget {
-  const GuidaSearchButton({super.key});
+  final List<LocationModel> data;
+
+  const GuidaSearchButton({super.key, required this.data});
 
   @override
   ConsumerState<GuidaSearchButton> createState() => _GuidaSearchButtonState();
 }
 
 class _GuidaSearchButtonState extends ConsumerState<GuidaSearchButton> {
-  // bool _isLoading = false;
   String? _searchingWithQuery;
 
   // The most recent options received from the API.
@@ -77,15 +56,14 @@ class _GuidaSearchButtonState extends ConsumerState<GuidaSearchButton> {
 
   @override
   Widget build(BuildContext context) {
-    return SearchAnchor(
+    return SearchAnchor.bar(
       isFullScreen: false,
       dividerColor: GuidaColors.white,
-      viewHintText: "Search for a faculty",
       textInputAction: TextInputAction.search,
-      builder: (context, controller) => const Icon(Icons.search),
+      viewHintText: "Search for a location",
       suggestionsBuilder: (context, controller) async {
         _searchingWithQuery = controller.text;
-        final List<Faculty> options =
+        final List<LocationModel> options =
             (await _search(_searchingWithQuery!)).toList();
 
         // If another search happened after this one, throw away these options.
@@ -96,14 +74,16 @@ class _GuidaSearchButtonState extends ConsumerState<GuidaSearchButton> {
         }
 
         _lastOptions = List<Widget>.generate(options.length, (int index) {
-          final Faculty item = options[index];
+          final LocationModel item = options[index];
           return GestureDetector(
             onTap: () {
-              controller.closeView(controller.text);
+              ref.read(searchController.notifier).addSearch(item);
+              controller.closeView(item.name);
+              Helpers.navigateTo(ref, GuidaRouteString.directions, args: item);
             },
             child: Container(
               padding: REdgeInsets.symmetric(horizontal: 16, vertical: 14),
-              margin: REdgeInsets.fromLTRB(12, 16, 24, 16),
+              margin: REdgeInsets.fromLTRB(12, 16, 24, 0),
               decoration: BoxDecoration(
                 color: GuidaColors.white,
                 borderRadius: BorderRadius.circular(12.r),
@@ -116,7 +96,7 @@ class _GuidaSearchButtonState extends ConsumerState<GuidaSearchButton> {
                 ],
               ),
               child: Text(
-                "Faculty of ${item.name}",
+                item.name,
                 style: TextStyle(fontSize: 16.sp),
               ),
             ),
@@ -128,13 +108,13 @@ class _GuidaSearchButtonState extends ConsumerState<GuidaSearchButton> {
     );
   }
 
-  Future<Iterable<Faculty>> _search(String query) async {
-    final data = ref.read(locationDataController).value!;
+  Future<Iterable<LocationModel>> _search(String query) async {
     if (query == '') {
-      return const Iterable<Faculty>.empty();
+      return const Iterable<LocationModel>.empty();
     }
-    return data.where((Faculty option) {
-      return option.name.contains(query.toLowerCase());
+
+    return widget.data.where((LocationModel option) {
+      return option.name.toLowerCase().contains(query.toLowerCase());
     });
   }
 }

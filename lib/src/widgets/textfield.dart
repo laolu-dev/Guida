@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -94,8 +95,8 @@ class _GuidaTextFieldState extends State<GuidaTextField> {
 }
 
 class MapTextField extends StatelessWidget {
-  final TextEditingController controller;
   final String hint;
+  final TextEditingController controller;
   final void Function()? onTap;
 
   const MapTextField({
@@ -107,45 +108,37 @@ class MapTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          height: 14.h,
-          width: 14.h,
-          decoration:
-              BoxDecoration(color: GuidaColors.red, shape: BoxShape.circle),
-        ),
-        SizedBox(width: 8.w),
-        Expanded(
-          child: TextField(
-            controller: controller,
-            style: TextStyle(
-              fontSize: 16.sp,
-              color: GuidaColors.black.withOpacity(.5),
-            ),
-            onTap: onTap,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: GuidaColors.white,
-              hintText: hint,
-              hintStyle: TextStyle(
-                fontSize: 20.sp,
-                color: GuidaColors.black.withOpacity(.5),
+    return Padding(
+      padding: EdgeInsets.only(left: 16.h, right: 12.h),
+      child: Row(
+        children: [
+          Icon(CupertinoIcons.location_solid, color: GuidaColors.redAccent),
+          SizedBox(width: 4.w),
+          Expanded(
+            child: TextField(
+              controller: controller,
+              style: TextStyle(
+                fontSize: 16.sp,
+                color: GuidaColors.black,
               ),
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: GuidaColors.blue, width: 2),
-                borderRadius: BorderRadius.circular(999),
-              ),
-              border: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(999),
+              onTap: onTap,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: GuidaColors.white,
+                hintText: hint,
+                hintStyle: TextStyle(fontSize: 14.sp, color: GuidaColors.black),
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                constraints: BoxConstraints(maxHeight: 45.h),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(50.r),
+                ),
               ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:guida/constants/images.dart';
 
 import '../../constants/color.dart';
 
@@ -24,7 +25,7 @@ class GuidaLogo extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12.r),
-        child: Image.asset("assets/guida_logo.png", fit: BoxFit.fill),
+        child: Image.asset(Images.logo, fit: BoxFit.fill),
       ),
     );
   }

@@ -5,12 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../constants/color.dart';
 import '../../constants/route_names.dart';
 import '../../util/helpers.dart';
-import '../models/department.dart';
-import '../models/faculty.dart';
-import '../models/location_model.dart';
+import '../models/department/department_model.dart';
+import '../models/faculty/faculty_model.dart';
+import '../models/location/location_model.dart';
 
 class FacultyTile extends ConsumerWidget {
-  final Faculty faculty;
+  final FacultyModel faculty;
   const FacultyTile({super.key, required this.faculty});
 
   @override
@@ -29,7 +29,7 @@ class FacultyTile extends ConsumerWidget {
       ),
       child: ExpansionTile(
         title: Text(
-          'Faculty of ${faculty.name}',
+          'Faculty of ${faculty.faculty}',
           style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
         ),
         backgroundColor: GuidaColors.white,
@@ -43,7 +43,7 @@ class FacultyTile extends ConsumerWidget {
           borderRadius: BorderRadius.circular(12.r),
         ),
         children: <Widget>[
-          for (Department i in faculty.departments)
+          for (DepartmentModel i in faculty.departments)
             DepartmentTile(department: i)
         ],
       ),
@@ -52,7 +52,7 @@ class FacultyTile extends ConsumerWidget {
 }
 
 class DepartmentTile extends ConsumerWidget {
-  final Department department;
+  final DepartmentModel department;
   const DepartmentTile({super.key, required this.department});
 
   @override
@@ -65,11 +65,12 @@ class DepartmentTile extends ConsumerWidget {
         padding: REdgeInsets.symmetric(vertical: 10, horizontal: 14),
         margin: REdgeInsets.only(bottom: 4),
         decoration: BoxDecoration(
-          // color: GuidaColors.grey.withOpacity(.4),
           borderRadius: BorderRadius.circular(12.r),
         ),
         child: Text(
-          "Department of ${department.name}",
+          department.department == "General"
+              ? department.department
+              : "Department of ${department.department}",
           style: TextStyle(fontSize: 16.sp),
         ),
       ),
@@ -78,17 +79,17 @@ class DepartmentTile extends ConsumerWidget {
 }
 
 class LocationTile extends ConsumerWidget {
-  final Location location;
+  final LocationModel location;
   const LocationTile({super.key, required this.location});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap: () => Helpers.navigateTo(ref, GuidaRouteString.directions,
-          args: location.directions),
+      onTap: () =>
+          Helpers.navigateTo(ref, GuidaRouteString.directions, args: location),
       child: Container(
         width: 1.sw,
-        padding: REdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: REdgeInsets.symmetric(horizontal: 16, vertical: 12),
         margin: REdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
           color: GuidaColors.white,
@@ -101,24 +102,9 @@ class LocationTile extends ConsumerWidget {
           ],
           borderRadius: BorderRadius.circular(12.r),
         ),
-        child: Row(
-          children: [
-            if (location.imageUrl != null)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12.r),
-                child: Image.network(
-                  location.imageUrl!,
-                  fit: BoxFit.fill,
-                  width: 45.w,
-                  height: 45.w,
-                ),
-              ),
-            SizedBox(width: 12.w),
-            Text(
-              location.name,
-              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
-            ),
-          ],
+        child: Text(
+          location.name,
+          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
         ),
       ),
     );

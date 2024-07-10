@@ -7,30 +7,12 @@ import 'config/routes.dart';
 import 'constants/color.dart';
 import 'util/helpers.dart';
 
-class GuidaApp extends ConsumerStatefulWidget {
-  const GuidaApp({super.key});
+class GuidaApp extends ConsumerWidget {
+  final String initialRoute;
+  const GuidaApp({super.key, required this.initialRoute});
 
   @override
-  ConsumerState<GuidaApp> createState() => _GuidaAppState();
-}
-
-class _GuidaAppState extends ConsumerState<GuidaApp> {
-  String? _initialRoute;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      final prefs = await SharedPreferences.getInstance();
-      setState(() {
-        _initialRoute = prefs.getString("initRoute");
-        debugPrint(_initialRoute);
-      });
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ScreenUtilInit(
       ensureScreenSize: true,
       designSize: const Size(395, 896),
@@ -42,7 +24,7 @@ class _GuidaAppState extends ConsumerState<GuidaApp> {
             colorScheme: ColorScheme.fromSeed(seedColor: GuidaColors.red),
             useMaterial3: true,
           ),
-          initialRoute: _initialRoute,
+          initialRoute: initialRoute,
           navigatorKey: ref.watch(navigatorKey),
           onGenerateRoute: GuidaRoutes.routeGenerator,
           debugShowCheckedModeBanner: false,

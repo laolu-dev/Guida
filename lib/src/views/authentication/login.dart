@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:guida/constants/images.dart';
 import 'package:ionicons/ionicons.dart';
 
 import '../../../constants/color.dart';
@@ -161,7 +162,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Image.asset(
-                    "assets/guida_logo.png",
+                    Images.logo,
                     color: GuidaColors.grey,
                     colorBlendMode: BlendMode.modulate,
                   ),
