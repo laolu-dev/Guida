@@ -54,7 +54,7 @@ class Helpers {
     return Marker(
       markerId: MarkerId(id),
       infoWindow: InfoWindow(title: infoWindow ?? "Your destination"),
-      icon: BitmapDescriptor.bytes(image),
+      icon: BytesMapBitmap(image),
       position: LatLng(lat, lng),
     );
   }

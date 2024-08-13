@@ -17,7 +17,7 @@ class GuidaMapAPI {
 class GuidaSheetAPI {
   static final Dio dio = Dio(
     BaseOptions(
-      baseUrl: GuidaConstants.sheetBaseUrl,
+      baseUrl: GuidaConstants.googleSheetApiUrl,
       connectTimeout: const Duration(seconds: 120),
       receiveTimeout: const Duration(seconds: 120),
       responseType: ResponseType.json,

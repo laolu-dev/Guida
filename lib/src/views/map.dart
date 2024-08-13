@@ -33,7 +33,8 @@ class _GuidaMapViewState extends ConsumerState<GuidaMapView>
   void initState() {
     super.initState();
     _startedRoute = false;
-    _animController = AnimationController(vsync: this);
+    _animController =
+        AnimationController(vsync: this, duration: Durations.long1);
     _to = TextEditingController();
   }
 
@@ -70,7 +71,7 @@ class _GuidaMapViewState extends ConsumerState<GuidaMapView>
         _controller.animateCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(
-                target: state!.location, zoom: 18.5, bearing: state.bearing),
+                target: state!.location, zoom: 18, bearing: state.bearing),
           ),
         );
       }
@@ -85,7 +86,7 @@ class _GuidaMapViewState extends ConsumerState<GuidaMapView>
           zoomControlsEnabled: false,
           myLocationButtonEnabled: false,
           initialCameraPosition: CameraPosition(
-            zoom: 18,
+            zoom: 13.5,
             target:
                 locationState.value?.currentLocation ?? GuidaConstants.unilag,
           ),
@@ -98,12 +99,13 @@ class _GuidaMapViewState extends ConsumerState<GuidaMapView>
       bottomSheet: BottomSheet(
         showDragHandle: true,
         backgroundColor: GuidaColors.grey,
+        animationController: _animController,
         onClosing: () {},
         builder: (context) {
           return locationState.value?.distance != null &&
                   locationState.value?.distance != 0
               ? Padding(
-                  padding: REdgeInsets.only(bottom: 48, left: 16, right: 16),
+                  padding: REdgeInsets.only(bottom: 32, left: 16, right: 16),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -215,7 +217,7 @@ class _GuidaMapViewState extends ConsumerState<GuidaMapView>
                     SizedBox(height: 16.h),
                     Padding(
                       padding:
-                          REdgeInsets.only(bottom: 48, left: 16, right: 16),
+                          REdgeInsets.only(bottom: 24, left: 16, right: 16),
                       child: GuidaButton(
                         name: "Draw Route",
                         action:

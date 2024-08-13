@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:guida/constants/images.dart';
-import '../controllers/search_places_controller.dart';
+import '../controllers/places_api_controller.dart';
 import '../widgets/loading_widget.dart';
 import 'package:ionicons/ionicons.dart';
 

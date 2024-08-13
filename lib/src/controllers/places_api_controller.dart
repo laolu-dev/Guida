@@ -14,12 +14,12 @@ class _PlacesNotifier extends FamilyAsyncNotifier<PlacesModel?, String> {
     state = const AsyncLoading();
     try {
       final response = await GuidaMapAPI.dio.get(
-          "?input=$arg&key=${GuidaConstants.getApiKey()}&sessiontoken=$token");
-          
+          "?input=$arg&components=country:ng&key=${GuidaConstants.getApiKey()}&sessiontoken=$token");
+
       state = AsyncData(PlacesModel.fromJson(response.data));
       return PlacesModel.fromJson(response.data);
-    } catch (e) {
-      state = AsyncError("$e", StackTrace.current);
+    } catch (error, stack) {
+      state = AsyncError("$error", stack);
       return null;
     }
   }

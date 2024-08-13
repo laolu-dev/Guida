@@ -11,24 +11,23 @@ import 'package:guida/constants/images.dart';
 import 'package:guida/src/controllers/map_route_controller.dart';
 
 import 'package:guida/util/helpers.dart';
-import '../../constants/constants.dart';
 import '../models/location_state/location_state.dart';
 
 class _LocationStateNotifier extends AutoDisposeAsyncNotifier<LocationState> {
-  final StreamController<Position> _streamController = StreamController();
   @override
   FutureOr<LocationState> build() async {
+    final init = await Geolocator.getLastKnownPosition();
     final userLocation = LocationState(
       distance: 0,
       address: "",
       markers: {},
       route: {},
-      currentLocation: GuidaConstants.unilag,
+      currentLocation:
+          LatLng(init?.latitude ?? 6.5166646, init?.longitude ?? 3.38499846),
     );
 
     try {
-      final Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.bestForNavigation);
+      final Position position = await Geolocator.getCurrentPosition();
       final Uint8List image = await Helpers.getBytesFromAssets(Images.user);
 
       final userMarker = Helpers.configureMarker(
@@ -147,9 +146,9 @@ class _LocationStateNotifier extends AutoDisposeAsyncNotifier<LocationState> {
   }
 
   void start() async {
-    await _streamController.addStream(Geolocator.getPositionStream());
+    final oldState = state.value!;
 
-    _streamController.stream.listen((position) {
+    Geolocator.getPositionStream().listen((position) async {
       double distance = Helpers.calculateDistance(
           position.latitude,
           position.longitude,
@@ -165,6 +164,32 @@ class _LocationStateNotifier extends AutoDisposeAsyncNotifier<LocationState> {
       debugPrint("New Position: ${position.toString()}");
       debugPrint("New Distance: ${distance.toString()}");
 
+      List<LatLng> routes = await Helpers.drawRouteLine(
+          position.latitude,
+          position.longitude,
+          state.value!.destination!.latitude,
+          state.value!.destination!.longitude);
+
+      if (oldState.route.isNotEmpty) {
+        oldState.route.clear();
+      }
+
+      final mode = ref.read(transportModeController);
+      final Uint8List image = await Helpers.getBytesFromAssets(switch (mode) {
+        TransportMode.walking => Images.walking,
+        TransportMode.car => Images.car,
+      });
+
+      oldState.markers.first.copyWith(
+        iconParam: BytesMapBitmap(image),
+        positionParam: LatLng(position.latitude, position.longitude),
+      );
+
+      state = AsyncData(state.value!.copyWith(
+        markers: {...oldState.markers},
+        route: {Helpers.configureRouteLine("route", routes)},
+      ));
+
       ref.read(mapRouteStateController.notifier).update(
             distance,
             LatLng(position.latitude, position.longitude),
@@ -173,9 +198,14 @@ class _LocationStateNotifier extends AutoDisposeAsyncNotifier<LocationState> {
     });
   }
 
-  void cancel() async => await _streamController.close();
+  void cancel() async {
+    await Geolocator.getPositionStream().listen((positon) {}).cancel();
+  }
 }
 
 final locationStateController =
     AutoDisposeAsyncNotifierProvider<_LocationStateNotifier, LocationState>(
         _LocationStateNotifier.new);
+
+final transportModeController =
+    StateProvider<TransportMode>((ref) => TransportMode.walking);

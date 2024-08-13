@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:guida/constants/color.dart';
 import 'package:guida/constants/enums.dart';
 import 'package:guida/constants/images.dart';
+import 'package:guida/src/controllers/map_controller.dart';
 
-class TransportDialog extends StatefulWidget {
+class TransportDialog extends ConsumerStatefulWidget {
   const TransportDialog({super.key});
 
   @override
-  State<TransportDialog> createState() => _TransportDialogState();
+  ConsumerState<TransportDialog> createState() => _TransportDialogState();
 }
 
-class _TransportDialogState extends State<TransportDialog> {
+class _TransportDialogState extends ConsumerState<TransportDialog> {
   TransportMode state = TransportMode.walking;
 
   @override
@@ -32,6 +34,9 @@ class _TransportDialogState extends State<TransportDialog> {
                 GestureDetector(
                   onTap: () {
                     setState(() => state = TransportMode.walking);
+                    ref
+                        .read(transportModeController.notifier)
+                        .update((value) => state);
                     Future.delayed(Durations.extralong4);
                     Navigator.pop(context, state);
                   },
@@ -62,6 +67,9 @@ class _TransportDialogState extends State<TransportDialog> {
                 GestureDetector(
                   onTap: () {
                     setState(() => state = TransportMode.car);
+                      ref
+                        .read(transportModeController.notifier)
+                        .update((value) => state);
                     Future.delayed(Durations.extralong4);
                     Navigator.pop(context, state);
                   },

@@ -38,9 +38,10 @@ class GuidaValidators {
   static String? passwordValidator(String? password) {
     if (password!.isEmpty) {
       return 'This field cannot be empty';
-    } else if (!password.isValidPassword) {
-      return 'Enter a valid password';
-    }
+    } 
+    // else if (!password.isValidPassword) {
+    //   return 'Enter a valid password';
+    // }
     return null;
   }
 
@@ -80,8 +81,8 @@ extension GuidaRegExp on String {
   }
 
   bool get isValidPassword {
-    final passwordRegExp =
-        RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+    final passwordRegExp = RegExp(
+        r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d@$!%*?&]{8,}$');
     return passwordRegExp.hasMatch(this);
   }
 }

@@ -120,7 +120,7 @@ class _SignupViewState extends ConsumerState<SignupView> {
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 64),
               child: Form(
                 key: _formKey,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
+                autovalidateMode: AutovalidateMode.always,
                 child: Column(
                   children: [
                     GuidaTextField(
