@@ -32,17 +32,10 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
-// Get the Google Map ApiKey and assign it to a LinkedHashMap
-def environmentVariables = [
-        ANDROID_KEY: project.hasProperty('ANDROID_KEY')
-                ? ANDROID_KEY
-                : "AIzaSyCv_bDvSnGxfTwhF7ZrhQQysBrGcJAilRI",
-]
-
 android {
-    namespace "com.tmdc.guida"
     compileSdkVersion 36
     ndkVersion '27.0.12077973'
+    namespace "com.tmdc.guida"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -63,12 +56,9 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-
-        resValue "string", "androidKey", environmentVariables.ANDROID_KEY
     }
 
     signingConfigs {
-
         release {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
