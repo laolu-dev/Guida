@@ -41,16 +41,16 @@ def environmentVariables = [
 
 android {
     namespace "com.tmdc.guida"
-    compileSdkVersion 34
+    compileSdkVersion 36
     ndkVersion '27.0.12077973'
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
 
     sourceSets {
@@ -59,7 +59,7 @@ android {
 
     defaultConfig {
         applicationId "com.tmdc.guida"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

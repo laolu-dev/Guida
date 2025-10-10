@@ -34,9 +34,9 @@ class _TransportDialogState extends ConsumerState<TransportDialog> {
                 GestureDetector(
                   onTap: () {
                     setState(() => state = TransportMode.walking);
-                    ref
-                        .read(transportModeController.notifier)
-                        .update((value) => state);
+                    // ref
+                    //     .read(transportModeController.notifier)
+                    //     .update((value) => state);
                     Future.delayed(Durations.extralong4);
                     Navigator.pop(context, state);
                   },
@@ -67,9 +67,9 @@ class _TransportDialogState extends ConsumerState<TransportDialog> {
                 GestureDetector(
                   onTap: () {
                     setState(() => state = TransportMode.car);
-                      ref
-                        .read(transportModeController.notifier)
-                        .update((value) => state);
+                      // ref
+                      //   .read(transportModeController)
+                      //   .update((value) => state);
                     Future.delayed(Durations.extralong4);
                     Navigator.pop(context, state);
                   },

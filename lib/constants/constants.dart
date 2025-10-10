@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import '../src/models/faculty/faculty_model.dart';
 
 class GuidaConstants {
@@ -22,7 +20,7 @@ class GuidaConstants {
   static const String googleSheetId = String.fromEnvironment("GOOGLE_SHEET_ID");
   static const String deploymentID = String.fromEnvironment("DEPLOYMENT_ID");
 
-  static const LatLng unilag = LatLng(6.5166646, 3.38499846);
+  // static const LatLng unilag = LatLng(6.5166646, 3.38499846);
 }
 
 final List<FacultyModel> facultiesData = [

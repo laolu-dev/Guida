@@ -3,16 +3,13 @@ import 'dart:ui' as ui;
 import 'package:cherry_toast/cherry_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/color.dart';
-import '../constants/constants.dart';
 import '../src/widgets/loading_widget.dart';
 
 final navigatorKey =
@@ -44,29 +41,29 @@ class Helpers {
         .roundToDouble();
   }
 
-  static Marker configureMarker(
-    String id,
-    double lat,
-    double lng,
-    Uint8List image, [
-    String? infoWindow,
-  ]) {
-    return Marker(
-      markerId: MarkerId(id),
-      infoWindow: InfoWindow(title: infoWindow ?? "Your destination"),
-      icon: BytesMapBitmap(image),
-      position: LatLng(lat, lng),
-    );
-  }
+  // static Marker configureMarker(
+  //   String id,
+  //   double lat,
+  //   double lng,
+  //   Uint8List image, [
+  //   String? infoWindow,
+  // ]) {
+  //   return Marker(
+  //     markerId: MarkerId(id),
+  //     infoWindow: InfoWindow(title: infoWindow ?? "Your destination"),
+  //     icon: BytesMapBitmap(image),
+  //     position: LatLng(lat, lng),
+  //   );
+  // }
 
-  static Polyline configureRouteLine(String polylineId, List<LatLng> points) {
-    return Polyline(
-      width: 6,
-      polylineId: PolylineId(polylineId),
-      points: points,
-      color: GuidaColors.red.withOpacity(.7),
-    );
-  }
+  // static Polyline configureRouteLine(String polylineId, List<LatLng> points) {
+  //   return Polyline(
+  //     width: 6,
+  //     polylineId: PolylineId(polylineId),
+  //     points: points,
+  //     color: GuidaColors.red.withOpacity(.7),
+  //   );
+  // }
 
   static String distanceCalculator(double distance) {
     return switch (distance) {
@@ -96,32 +93,32 @@ class Helpers {
     }
   }
 
-  static Future<List<LatLng>> drawRouteLine(
-      double startLat, double startLng, double endLat, double endLng) async {
-    List<LatLng> points = [];
-    PolylinePoints polylinePoints = PolylinePoints();
+  // static Future<List<LatLng>> drawRouteLine(
+  //     double startLat, double startLng, double endLat, double endLng) async {
+  //   List<LatLng> points = [];
+  //   PolylinePoints polylinePoints = PolylinePoints(apiKey: 'GuidaConstants.getApiKey()');
 
-    try {
-      PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        request: PolylineRequest(
-          origin: PointLatLng(startLat, startLng),
-          destination: PointLatLng(endLat, endLng),
-          mode: TravelMode.walking,
-        ),
-        googleApiKey: GuidaConstants.getApiKey(),
-      );
+  //   try {
+  //     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+  //       request: PolylineRequest(
+  //         origin: PointLatLng(startLat, startLng),
+  //         destination: PointLatLng(endLat, endLng),
+  //         mode: TravelMode.walking,
+  //       ),
+  //       // googleApiKey: GuidaConstants.getApiKey(),
+  //     );
 
-      if (result.points.isNotEmpty) {
-        for (var coordinates in result.points) {
-          points.add(LatLng(coordinates.latitude, coordinates.longitude));
-        }
-      }
-      return points;
-    } catch (e) {
-      debugPrint("$e");
-      return [];
-    }
-  }
+  //     if (result.points.isNotEmpty) {
+  //       for (var coordinates in result.points) {
+  //         points.add(LatLng(coordinates.latitude, coordinates.longitude));
+  //       }
+  //     }
+  //     return points;
+  //   } catch (e) {
+  //     debugPrint("$e");
+  //     return [];
+  //   }
+  // }
 
   static logout() async {
     final prefs = await SharedPreferences.getInstance();

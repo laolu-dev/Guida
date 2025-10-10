@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LoginNotifier extends AutoDisposeAsyncNotifier<User?> {
+class LoginNotifier extends AsyncNotifier<User?> {
   @override
   FutureOr<User?> build() => null;
 
@@ -22,7 +22,7 @@ class LoginNotifier extends AutoDisposeAsyncNotifier<User?> {
   }
 }
 
-class CreateAccountNotifier extends AutoDisposeAsyncNotifier<User?> {
+class CreateAccountNotifier extends AsyncNotifier<User?> {
   @override
   FutureOr<User?> build() => null;
 
@@ -46,7 +46,7 @@ class CreateAccountNotifier extends AutoDisposeAsyncNotifier<User?> {
   }
 }
 
-class ResendLinkNotifier extends AutoDisposeAsyncNotifier<void> {
+class ResendLinkNotifier extends AsyncNotifier<void> {
   @override
   FutureOr<void> build() => null;
 

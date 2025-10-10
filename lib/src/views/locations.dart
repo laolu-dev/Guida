@@ -34,7 +34,7 @@ class _LocationsViewState extends ConsumerState<LocationsView> {
 
   @override
   Widget build(BuildContext context) {
-    // final recent = ref.watch(searchController);
+    final recent = ref.watch(searchController);
     return ViewWidget(
       viewBody: SafeArea(
         child: SingleChildScrollView(
@@ -61,40 +61,40 @@ class _LocationsViewState extends ConsumerState<LocationsView> {
                 padding: REdgeInsets.symmetric(vertical: 16),
                 child: GuidaSearchButton(data: widget.department.locations),
               ),
-              ListView.builder(
-                shrinkWrap: true,
-                controller: _controller,
-                itemCount: widget.department.locations.length,
-                padding: REdgeInsets.symmetric(vertical: 20),
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) =>
-                    LocationTile(location: widget.department.locations[index]),
-              ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     Text(
-              //       "Recent Searches:",
-              //       style: TextStyle(fontSize: 16.sp),
-              //     ),
-              //     TextButton(
-              //       onPressed: () {
-              //         ref.read(searchController.notifier).clearAll();
-              //         ref.invalidate(searchController);
-              //       },
-              //       child: const Text("Clear all"),
-              //     )
-              //   ],
-              // ),
               // ListView.builder(
               //   shrinkWrap: true,
               //   controller: _controller,
-              //   itemCount: recent.length,
+              //   itemCount: widget.department.locations.length,
               //   padding: REdgeInsets.symmetric(vertical: 20),
               //   physics: const NeverScrollableScrollPhysics(),
               //   itemBuilder: (context, index) =>
-              //       LocationTile(location: recent[index]),
+              //       LocationTile(location: widget.department.locations[index]),
               // ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Recent Searches:",
+                    style: TextStyle(fontSize: 16.sp),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      ref.read(searchController.notifier).clearAll();
+                      ref.invalidate(searchController);
+                    },
+                    child: const Text("Clear all"),
+                  )
+                ],
+              ),
+              ListView.builder(
+                shrinkWrap: true,
+                controller: _controller,
+                itemCount: recent.length,
+                padding: REdgeInsets.symmetric(vertical: 20),
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) =>
+                    LocationTile(location: recent[index]),
+              ),
             ],
           ),
         ),

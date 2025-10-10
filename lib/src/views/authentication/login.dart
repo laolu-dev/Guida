@@ -18,6 +18,7 @@ import '../../widgets/textfield.dart';
 import '../../widgets/view_widget.dart';
 import 'forgot_password.dart';
 
+
 class LoginView extends ConsumerStatefulWidget {
   const LoginView({super.key});
 
@@ -59,7 +60,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
     ref.listen(
       loginController,
       (_, state) {
-        state.when(
+        state?.when(
           data: (user) async {
             Helpers.navigateBack(ref);
             Helpers.showInAppAlertSuccess(

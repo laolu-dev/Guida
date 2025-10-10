@@ -4,14 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'auth_controller.dart';
 
 final loginController =
-    AutoDisposeAsyncNotifierProvider<LoginNotifier, User?>(LoginNotifier.new);
+    AsyncNotifierProvider<LoginNotifier, User?>(LoginNotifier.new);
 
 final createAccountController =
-    AutoDisposeAsyncNotifierProvider<CreateAccountNotifier, User?>(
+    AsyncNotifierProvider.autoDispose<CreateAccountNotifier, User?>(
         CreateAccountNotifier.new);
 
 final resetLinkController =
-    AutoDisposeAsyncNotifierProvider<ResendLinkNotifier, void>(
+    AsyncNotifierProvider.autoDispose<ResendLinkNotifier, void>(
         ResendLinkNotifier.new);
-
-

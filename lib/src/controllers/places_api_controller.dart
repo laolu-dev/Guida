@@ -7,9 +7,12 @@ import 'package:uuid/uuid.dart';
 
 import '../models/place/place_model/places_model.dart';
 
-class _PlacesNotifier extends FamilyAsyncNotifier<PlacesModel?, String> {
+class _PlacesNotifier extends AsyncNotifier<PlacesModel?> {
+  _PlacesNotifier(this.arg);
+
+  final String arg;
   @override
-  FutureOr<PlacesModel?> build(arg) async {
+  FutureOr<PlacesModel?> build() async {
     final String token = const Uuid().v4();
     state = const AsyncLoading();
     try {
@@ -26,5 +29,5 @@ class _PlacesNotifier extends FamilyAsyncNotifier<PlacesModel?, String> {
 }
 
 final placesController =
-    AsyncNotifierProviderFamily<_PlacesNotifier, PlacesModel?, String>(
+    AsyncNotifierProvider.family<_PlacesNotifier, PlacesModel?, String>(
         _PlacesNotifier.new);
